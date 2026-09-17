@@ -1,0 +1,441 @@
+{
+  "summary": {
+    "version": "v1",
+    "model": "claude-sonnet-4-6",
+    "runs": 20,
+    "parsed_rate": 1.0,
+    "accuracy": 1.0,
+    "tool_use_rate": 1.0,
+    "warning_runs": 2,
+    "retry_runs": 1,
+    "consistency": 0.9,
+    "mean_latency_ms": 8250,
+    "state_after": {
+      "run_count": 20,
+      "error_count": 0,
+      "fallback_count": 0,
+      "last_action": "classify_priority",
+      "last_suggestion": {
+        "action": "classify_priority",
+        "task_id": 404,
+        "priority": null,
+        "suggested_due_date": null,
+        "summary": null,
+        "reasoning": "Task 404 could not be found in the system \u2014 the lookup returned an error indicating it does not exist, so no priority classification is possible.",
+        "confidence": 0.0
+      },
+      "last_tool_call": {
+        "name": "lookup_task",
+        "args": {
+          "task_id": 404
+        },
+        "ok": false,
+        "at": "2026-09-17T03:03:32+00:00"
+      },
+      "history_length": 39,
+      "updated_at": "2026-09-17T03:03:36+00:00"
+    }
+  },
+  "rows": [
+    {
+      "case": "C1_explicit_high",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 8242,
+      "answer": "high",
+      "confidence": 0.97,
+      "reasoning": "The task involves renewing a WiFi certificate that expires very soon (only 1 day until due), and missing it would cause all staff to lose network access \u2014 making it both time-critical and high-impact.",
+      "raw_output": "Here is the priority classification for task 2:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 2,\n  \"priority\": \"high\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"The task involves renewing a WiFi certificate that expires very soon (only 1 day until due), and missing it would cause all staff to lose network access \u2014 making it both time-critical and high-impact.\",\n  "
+    },
+    {
+      "case": "C1_explicit_high",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6943,
+      "answer": "high",
+      "confidence": 0.97,
+      "reasoning": "The task involves renewing a WiFi certificate that expires imminently (only 1 day until due), and failure to act will cause staff to lose network access \u2014 a significant operational impact. This combination of urgency and broad consequence clearly warrants a high priority.",
+      "raw_output": "Here is the priority classification for task 2:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 2,\n  \"priority\": \"high\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"The task involves renewing a WiFi certificate that expires imminently (only 1 day until due), and failure to act will cause staff to lose network access \u2014 a significant operational impact. This combination"
+    },
+    {
+      "case": "C2_housekeeping_low",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 7623,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "The task involves archiving old records with no one waiting on it, a non-urgent nature, and a due date still 24 days away \u2014 all strong indicators of low priority.",
+      "raw_output": "Here is the priority classification for task 7:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 7,\n  \"priority\": \"low\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"The task involves archiving old records with no one waiting on it, a non-urgent nature, and a due date still 24 days away \u2014 all strong indicators of low priority.\",\n  \"confidence\": 0.95\n}\n```\n\n**Breakdown:*"
+    },
+    {
+      "case": "C2_housekeeping_low",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 7959,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "The task involves archiving old records with no one waiting on it, a non-urgent nature, and a due date still 24 days away \u2014 all strong indicators of low priority.",
+      "raw_output": "I've retrieved the task details. Here is the priority classification:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 7,\n  \"priority\": \"low\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"The task involves archiving old records with no one waiting on it, a non-urgent nature, and a due date still 24 days away \u2014 all strong indicators of low priority.\",\n  \"confidence\": 0.9"
+    },
+    {
+      "case": "C3_unset_medium",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 9094,
+      "answer": "medium",
+      "confidence": 0.75,
+      "reasoning": "The task involves a procurement process (getting quotes and submitting a purchase request) with a due date 9 days away \u2014 enough lead time to avoid urgency, but it requires coordination with finance, making it more than a low-priority item.",
+      "raw_output": "Here is the priority classification for task 4:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 4,\n  \"priority\": \"medium\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"The task involves a procurement process (getting quotes and submitting a purchase request) with a due date 9 days away \u2014 enough lead time to avoid urgency, but it requires coordination with finance, maki"
+    },
+    {
+      "case": "C3_unset_medium",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 8671,
+      "answer": "medium",
+      "confidence": 0.75,
+      "reasoning": "The task involves a procurement process (getting quotes and submitting a purchase request) with a due date 9 days away \u2014 enough lead time to avoid urgency, but it requires coordination with finance, making it more than a low-priority item.",
+      "raw_output": "Here is the priority classification for task 4:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 4,\n  \"priority\": \"medium\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"The task involves a procurement process (getting quotes and submitting a purchase request) with a due date 9 days away \u2014 enough lead time to avoid urgency, but it requires coordination with finance, maki"
+    },
+    {
+      "case": "C4_overdue_bug_high",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 8749,
+      "answer": "high",
+      "confidence": 0.95,
+      "reasoning": "This task involves a login bug causing 500 errors on a student portal, which directly blocks users from accessing the system \u2014 a critical, user-facing issue. Additionally, the task is already 3 days overdue, making it even more urgent to address immediately.",
+      "raw_output": "Here is my classification for task 5:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 5,\n  \"priority\": \"high\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"This task involves a login bug causing 500 errors on a student portal, which directly blocks users from accessing the system \u2014 a critical, user-facing issue. Additionally, the task is already 3 days overdue, making "
+    },
+    {
+      "case": "C4_overdue_bug_high",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 7876,
+      "answer": "high",
+      "confidence": 0.95,
+      "reasoning": "This task involves a login bug causing 500 errors on the student portal, which directly blocks users from accessing the system \u2014 a critical, user-facing issue. Additionally, it is already 3 days overdue, making it even more urgent to address immediately.",
+      "raw_output": "Here is my classification for task 5:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 5,\n  \"priority\": \"high\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"This task involves a login bug causing 500 errors on the student portal, which directly blocks users from accessing the system \u2014 a critical, user-facing issue. Additionally, it is already 3 days overdue, making it e"
+    },
+    {
+      "case": "C5_text_urgent",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 1,
+      "retry": false,
+      "latency_ms": 6680,
+      "answer": "high",
+      "confidence": 0.99,
+      "reasoning": "A failed server room air conditioner with rising temperatures poses an imminent risk of hardware failure and data loss within hours, making this a critical infrastructure emergency. The extreme time sensitivity and potential for widespread business impact unambiguously place this in the highest priority category.",
+      "raw_output": "Based on the task details you've provided, I can classify this immediately \u2014 no tool lookup needed since the task isn't saved yet.\n\n**Analysis:**\n- **Title:** Server room aircon failed\n- **Description:** Temperature rising, servers will overheat within hours\n\nThis is clearly a critical, time-sensitive infrastructure emergency. Overheating servers can lead to hardware failure, data loss, and signif"
+    },
+    {
+      "case": "C5_text_urgent",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [
+        "summarise_tasks"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 8049,
+      "answer": "high",
+      "confidence": 0.99,
+      "reasoning": "A failed server room air conditioner with rising temperatures poses an imminent risk of hardware failure and data loss within hours, making this a critical, time-sensitive incident. This warrants the highest priority as the impact is severe and the window to act is extremely narrow.",
+      "raw_output": "Based on the task title and description alone, this is a clear-cut classification:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": null,\n  \"priority\": \"high\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"A failed server room air conditioner with rising temperatures poses an imminent risk of hardware failure and data loss within hours, making this a critical, time-sensi"
+    },
+    {
+      "case": "C6_text_trivial",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 1,
+      "retry": false,
+      "latency_ms": 5428,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "Reorganising browser bookmarks is a minor housekeeping task with no deadline and no stated urgency or business impact, making it a classic 'do it whenever' low-priority item.",
+      "raw_output": "Since this task isn't saved yet, I don't need to look anything up \u2014 I can classify it directly based on the title and description you've provided.\n\n**Title:** Reorganise browser bookmarks\n**Description:** Whenever, no deadline\n\nHere's my assessment:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": null,\n  \"priority\": \"low\",\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"R"
+    },
+    {
+      "case": "C6_text_trivial",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": true,
+      "latency_ms": 5881,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "Reorganising browser bookmarks is a minor housekeeping task with no deadline and no urgency, making it a low-priority item that can be done at any convenient time.",
+      "raw_output": "{\"action\": \"classify_priority\", \"task_id\": null, \"priority\": \"low\", \"suggested_due_date\": null, \"summary\": null, \"reasoning\": \"Reorganising browser bookmarks is a minor housekeeping task with no deadline and no urgency, making it a low-priority item that can be done at any convenient time.\", \"confidence\": 0.95}"
+    },
+    {
+      "case": "C7_due_date_overdue",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 9650,
+      "answer": "2026-09-18",
+      "confidence": 0.82,
+      "reasoning": "This is a high-impact login bug (500 error) that is already 3 days overdue, making it urgent to resolve immediately. A realistic revised due date of 2026-09-18 gives the team roughly 1 business day to investigate and patch the ampersand-handling issue without further delay.",
+      "raw_output": "The task is already overdue by 3 days (due 2026-09-14, created 2026-09-02). Given it's a **bug fix** causing a **500 error on login** \u2014 a critical user-facing issue \u2014 I'll suggest a very near-term due date to reflect the urgency.\n\n```json\n{\n  \"action\": \"suggest_due_date\",\n  \"task_id\": 5,\n  \"priority\": null,\n  \"suggested_due_date\": \"2026-09-18\",\n  \"summary\": null,\n  \"reasoning\": \"This is a high-imp"
+    },
+    {
+      "case": "C7_due_date_overdue",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 8062,
+      "answer": "2026-09-19",
+      "confidence": 0.82,
+      "reasoning": "This is an active production bug causing 500 errors for users logging in with an ampersand in their password \u2014 it should be treated as urgent. The original due date (2026-09-14) has already passed, so a realistic reset to 2026-09-19 gives roughly 2 business days for diagnosis, fix, and smoke-testing without unnecessary delay.",
+      "raw_output": "The task is already overdue by 3 days (due 2026-09-14, created 2026-09-02). Given it's a **bug fix** causing a 500 error for users \u2014 a real, user-facing production issue \u2014 I'll suggest a tight but realistic new due date: **2 business days from today** (2026-09-19), accounting for investigation, fix, and basic testing.\n\n```json\n{\n  \"action\": \"suggest_due_date\",\n  \"task_id\": 5,\n  \"priority\": null,\n "
+    },
+    {
+      "case": "C8_due_date_none",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 15126,
+      "answer": "2026-10-15",
+      "confidence": 0.85,
+      "reasoning": "The description explicitly states Marketing wants a draft by mid-October, and no firm date has been set yet. October 15th is the standard interpretation of 'mid-month' and gives ample lead time from the September 2nd creation date.",
+      "raw_output": "I have the task details. Let me reason through a realistic due date.\n\n- **Title:** Draft newsletter for October intake\n- **Description:** Marketing wants a draft by mid month (October), no firm date yet.\n- **Priority:** Medium\n- **Created:** 2026-09-02\n- **Status:** Todo\n\n\"Mid-month October\" typically means around October 15th. Given the medium priority and that it was created in early September ("
+    },
+    {
+      "case": "C8_due_date_none",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 9893,
+      "answer": "2026-10-15",
+      "confidence": 0.85,
+      "reasoning": "The description explicitly states Marketing wants a draft by mid-October, and no firm date has been set yet. October 15th is the standard interpretation of 'mid-month' and gives ample lead time from the September 2nd creation date.",
+      "raw_output": "I have the task details. Let me reason through a realistic due date.\n\n- **Title:** Draft newsletter for October intake\n- **Description:** Marketing wants a draft by mid month (October), no firm date yet.\n- **Priority:** Medium\n- **Created:** 2026-09-02\n- **Status:** Todo\n\n\"Mid-month October\" typically means around October 15th. Given the medium priority and that it was created in early September ("
+    },
+    {
+      "case": "C9_weekly_summary",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "list_open_tasks",
+      "tools_called": [
+        "summarise_tasks",
+        "list_open_tasks"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 9431,
+      "answer": "You have 4 open tasks due within the next 7 days, plus 1 ove",
+      "confidence": 0.97,
+      "reasoning": "Both the summarise_tasks and list_open_tasks calls returned consistent, complete data. The overdue item and the two high-priority tasks due within 24 hours are clearly the most urgent, making the prioritisation straightforward.",
+      "raw_output": "```json\n{\n  \"action\": \"weekly_summary\",\n  \"task_id\": null,\n  \"priority\": null,\n  \"suggested_due_date\": null,\n  \"summary\": \"You have 4 open tasks due within the next 7 days, plus 1 overdue item. The most urgent are: (1) **Fix login bug on student portal** \u2014 already 3 days overdue and needs immediate attention; (2) **Submit COIT12204 Assessment 3** \u2014 high priority and due today (17 Sep); (3) **Renew"
+    },
+    {
+      "case": "C9_weekly_summary",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "list_open_tasks",
+      "tools_called": [
+        "summarise_tasks",
+        "list_open_tasks"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 10286,
+      "answer": "You have 4 open tasks due within the next 7 days, plus 1 ove",
+      "confidence": 0.97,
+      "reasoning": "Both summarise_tasks and list_open_tasks were called to get a complete picture. The summary highlights the four tasks surfaced by list_open_tasks, ordered by urgency (overdue first, then by days_until_due), and cross-references priority labels from the summary counts.",
+      "raw_output": "```json\n{\n  \"action\": \"weekly_summary\",\n  \"task_id\": null,\n  \"priority\": null,\n  \"suggested_due_date\": null,\n  \"summary\": \"You have 4 open tasks due within the next 7 days, plus 1 overdue item that needs immediate attention. The most urgent items are: (1) **Fix login bug on student portal** \u2014 already 3 days overdue and still in 'todo' status; (2) **Submit COIT12204 Assessment 3** \u2014 due TODAY (17 S"
+    },
+    {
+      "case": "C10_missing_task",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [
+        "priority missing for classify_priority"
+      ],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5559,
+      "answer": "",
+      "confidence": 0.0,
+      "reasoning": "Task 404 could not be found in the system \u2014 the lookup returned an error indicating it does not exist, so no priority classification is possible.",
+      "raw_output": "Task 404 does not exist in the system, so I'm unable to classify its priority. Here is the response reflecting that:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 404,\n  \"priority\": null,\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"Task 404 could not be found in the system \u2014 the lookup returned an error indicating it does not exist, so no priority classification is "
+    },
+    {
+      "case": "C10_missing_task",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [
+        "priority missing for classify_priority"
+      ],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5810,
+      "answer": "",
+      "confidence": 0.0,
+      "reasoning": "Task 404 could not be found in the system \u2014 the lookup returned an error indicating it does not exist, so no priority classification is possible.",
+      "raw_output": "Task 404 does not exist in the system, so I'm unable to classify its priority. Here is the response reflecting that:\n\n```json\n{\n  \"action\": \"classify_priority\",\n  \"task_id\": 404,\n  \"priority\": null,\n  \"suggested_due_date\": null,\n  \"summary\": null,\n  \"reasoning\": \"Task 404 could not be found in the system \u2014 the lookup returned an error indicating it does not exist, so no priority classification is "
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+venv/
+logs/
+data/agent_state.json
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+evaluation/bad_key_run/

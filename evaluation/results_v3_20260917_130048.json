@@ -1,0 +1,439 @@
+{
+  "summary": {
+    "version": "v3",
+    "model": "claude-sonnet-4-6",
+    "runs": 20,
+    "parsed_rate": 1.0,
+    "accuracy": 1.0,
+    "tool_use_rate": 1.0,
+    "warning_runs": 2,
+    "retry_runs": 0,
+    "consistency": 0.9,
+    "mean_latency_ms": 6766,
+    "state_after": {
+      "run_count": 20,
+      "error_count": 0,
+      "fallback_count": 0,
+      "last_action": "classify_priority",
+      "last_suggestion": {
+        "action": "classify_priority",
+        "task_id": 404,
+        "priority": null,
+        "suggested_due_date": null,
+        "summary": null,
+        "reasoning": "The tool returned an error: task 404 does not exist. No data is available to classify its priority.",
+        "confidence": 0.0
+      },
+      "last_tool_call": {
+        "name": "lookup_task",
+        "args": {
+          "task_id": 404
+        },
+        "ok": false,
+        "at": "2026-09-17T03:08:37+00:00"
+      },
+      "history_length": 38,
+      "updated_at": "2026-09-17T03:08:40+00:00"
+    }
+  },
+  "rows": [
+    {
+      "case": "C1_explicit_high",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6424,
+      "answer": "high",
+      "confidence": 0.98,
+      "reasoning": "The task is due in 1 day (2026-09-18), which falls within the 3-day high-priority window, and it is explicitly blocking staff access to WiFi if missed.",
+      "raw_output": "Task 2 is due tomorrow (2026-09-18), which is within 3 days, and its description explicitly warns of staff access loss if missed \u2014 a clear blocker.\n\n{\"action\": \"classify_priority\", \"task_id\": 2, \"priority\": \"high\", \"reasoning\": \"The task is due in 1 day (2026-09-18), which falls within the 3-day high-priority window, and it is explicitly blocking staff access to WiFi if missed.\", \"confidence\": 0.9"
+    },
+    {
+      "case": "C1_explicit_high",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5934,
+      "answer": "high",
+      "confidence": 0.98,
+      "reasoning": "The task is due in 1 day (2026-09-18), which falls within the 3-day high-priority threshold, and the description warns that staff will lose WiFi access if the certificate renewal is missed \u2014 making it both time-critical and blocking other people.",
+      "raw_output": "Task 2 is due tomorrow (2026-09-18), which is within 3 days, and its description explicitly warns of staff access loss if missed \u2014 both factors point clearly to **high** priority.\n\n{\"action\": \"classify_priority\", \"task_id\": 2, \"priority\": \"high\", \"reasoning\": \"The task is due in 1 day (2026-09-18), which falls within the 3-day high-priority threshold, and the description warns that staff will lose"
+    },
+    {
+      "case": "C2_housekeeping_low",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6101,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "Task 7 is due 2026-10-11 (24 days away), well outside the medium-priority window of 14 days, and the description explicitly states nobody is waiting on it \u2014 making this a housekeeping task with no deadline pressure.",
+      "raw_output": "Task 7 is due in 24 days, has no blocking dependencies, and explicitly states nobody is waiting on it \u2014 all pointing clearly to low priority.\n\n{\"action\": \"classify_priority\", \"task_id\": 7, \"priority\": \"low\", \"reasoning\": \"Task 7 is due 2026-10-11 (24 days away), well outside the medium-priority window of 14 days, and the description explicitly states nobody is waiting on it \u2014 making this a houseke"
+    },
+    {
+      "case": "C2_housekeeping_low",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5271,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "The task is due in 24 days, nobody is waiting on it, and it is a housekeeping/archival activity \u2014 all of which place it firmly in the low-priority category per the rubric.",
+      "raw_output": "Task 7 is due in 24 days (2026-10-11), has no one waiting on it, and is explicitly described as a housekeeping/archival task \u2014 all pointing clearly to **low** priority per the rubric.\n\n{\"action\": \"classify_priority\", \"task_id\": 7, \"priority\": \"low\", \"reasoning\": \"The task is due in 24 days, nobody is waiting on it, and it is a housekeeping/archival activity \u2014 all of which place it firmly in the lo"
+    },
+    {
+      "case": "C3_unset_medium",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5586,
+      "answer": "medium",
+      "confidence": 0.95,
+      "reasoning": "The task is due on 2026-09-26, which is 9 days from today \u2014 squarely within the 4\u201314 day window that maps to medium priority. It is not overdue, not due within 3 days, and there is no indication it is blocking other people or systems.",
+      "raw_output": "Task 4 is due on 2026-09-26, which is 9 days from today (2026-09-17). Per the priority rubric, tasks due within 4\u201314 days fall into the **medium** priority bucket.\n\n{\"action\": \"classify_priority\", \"task_id\": 4, \"priority\": \"medium\", \"reasoning\": \"The task is due on 2026-09-26, which is 9 days from today \u2014 squarely within the 4\u201314 day window that maps to medium priority. It is not overdue, not due "
+    },
+    {
+      "case": "C3_unset_medium",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 7087,
+      "answer": "medium",
+      "confidence": 0.95,
+      "reasoning": "Task 4 ('Order new iPads for assessment lab') is due on 2026-09-26, which is 9 days away. Per the rubric, tasks due within 4\u201314 days are medium priority, and there is no indication it is blocking other people or systems.",
+      "raw_output": "Task 4 is due on 2026-09-26, which is 9 days from today (2026-09-17). Per the priority rubric, tasks due within 4\u201314 days fall into the **medium** priority band, and there's no indication it's blocking other people or systems.\n\n{\"action\": \"classify_priority\", \"task_id\": 4, \"priority\": \"medium\", \"reasoning\": \"Task 4 ('Order new iPads for assessment lab') is due on 2026-09-26, which is 9 days away. "
+    },
+    {
+      "case": "C4_overdue_bug_high",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5183,
+      "answer": "high",
+      "confidence": 0.98,
+      "reasoning": "The task is overdue by 3 days (due 2026-09-14) and involves a login bug that is actively blocking users from accessing the student portal, satisfying both the overdue and blocking-others criteria for high priority.",
+      "raw_output": "Task 5 is overdue by 3 days (due 2026-09-14, today is 2026-09-17), and it's a login bug actively blocking users \u2014 both factors push it firmly into the high priority bracket.\n\n{\"action\": \"classify_priority\", \"task_id\": 5, \"priority\": \"high\", \"reasoning\": \"The task is overdue by 3 days (due 2026-09-14) and involves a login bug that is actively blocking users from accessing the student portal, satisf"
+    },
+    {
+      "case": "C4_overdue_bug_high",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 5815,
+      "answer": "high",
+      "confidence": 0.97,
+      "reasoning": "The task is overdue by 3 days (due 2026-09-14) and involves a live login bug blocking users from accessing the student portal, which meets both the overdue and blocking-other-people criteria for high priority.",
+      "raw_output": "Task 5 is overdue by 3 days (due 2026-09-14, today is 2026-09-17), and it's a login bug actively affecting users \u2014 both factors push it firmly into the high priority bucket.\n\n{\"action\": \"classify_priority\", \"task_id\": 5, \"priority\": \"high\", \"reasoning\": \"The task is overdue by 3 days (due 2026-09-14) and involves a live login bug blocking users from accessing the student portal, which meets both t"
+    },
+    {
+      "case": "C5_text_urgent",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 1,
+      "retry": false,
+      "latency_ms": 3285,
+      "answer": "high",
+      "confidence": 0.98,
+      "reasoning": "The aircon failure is actively causing rising temperatures that will damage servers within hours, making this an urgent situation that is blocking critical systems. This clearly meets the 'blocking other people or systems' criterion for high priority.",
+      "raw_output": "{\"action\": \"classify_priority\", \"task_id\": null, \"priority\": \"high\", \"reasoning\": \"The aircon failure is actively causing rising temperatures that will damage servers within hours, making this an urgent situation that is blocking critical systems. This clearly meets the 'blocking other people or systems' criterion for high priority.\", \"confidence\": 0.98}"
+    },
+    {
+      "case": "C5_text_urgent",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 1,
+      "retry": false,
+      "latency_ms": 2880,
+      "answer": "high",
+      "confidence": 0.98,
+      "reasoning": "The aircon failure is actively causing rising temperatures that will damage servers within hours, making this an urgent situation that is blocking critical systems. This clearly meets the 'blocking other people or systems' criterion for high priority.",
+      "raw_output": "{\"action\": \"classify_priority\", \"task_id\": null, \"priority\": \"high\", \"reasoning\": \"The aircon failure is actively causing rising temperatures that will damage servers within hours, making this an urgent situation that is blocking critical systems. This clearly meets the 'blocking other people or systems' criterion for high priority.\", \"confidence\": 0.98}"
+    },
+    {
+      "case": "C6_text_trivial",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 1,
+      "retry": false,
+      "latency_ms": 2651,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "The task has no deadline, no urgency, and no indication that anyone is waiting on it \u2014 it is purely housekeeping. This maps directly to the 'low' priority tier.",
+      "raw_output": "{\"action\": \"classify_priority\", \"priority\": \"low\", \"reasoning\": \"The task has no deadline, no urgency, and no indication that anyone is waiting on it \u2014 it is purely housekeeping. This maps directly to the 'low' priority tier.\", \"confidence\": 0.95}"
+    },
+    {
+      "case": "C6_text_trivial",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": null,
+      "tools_called": [],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 1,
+      "retry": false,
+      "latency_ms": 2235,
+      "answer": "low",
+      "confidence": 0.95,
+      "reasoning": "The task has no deadline, is purely personal housekeeping, and nobody is waiting on it \u2014 all indicators of low priority per the rubric.",
+      "raw_output": "{\"action\": \"classify_priority\", \"task_id\": null, \"priority\": \"low\", \"reasoning\": \"The task has no deadline, is purely personal housekeeping, and nobody is waiting on it \u2014 all indicators of low priority per the rubric.\", \"confidence\": 0.95}"
+    },
+    {
+      "case": "C7_due_date_overdue",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6288,
+      "answer": "2026-09-17",
+      "confidence": 0.95,
+      "reasoning": "The task was due on 2026-09-14 and is already 3 days overdue; it's a user-facing login bug causing 500 errors, making it urgent and blocking users, so the suggested due date is today (2026-09-17) \u2014 the earliest realistic date.",
+      "raw_output": "Task 5 is overdue by 3 days (original due date was 2026-09-14). It's a login bug affecting users, which is urgent and blocking real people, so the earliest realistic date \u2014 today \u2014 is appropriate.\n\n{\"action\": \"suggest_due_date\", \"task_id\": 5, \"suggested_due_date\": \"2026-09-17\", \"reasoning\": \"The task was due on 2026-09-14 and is already 3 days overdue; it's a user-facing login bug causing 500 erro"
+    },
+    {
+      "case": "C7_due_date_overdue",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6239,
+      "answer": "2026-09-17",
+      "confidence": 0.95,
+      "reasoning": "The task was due on 2026-09-14 and is already 3 days overdue; it's a user-facing login bug causing 500 errors, making it urgent and blocking users, so the suggested due date is today (2026-09-17) \u2014 the earliest realistic date.",
+      "raw_output": "Task 5 is overdue by 3 days (original due date was 2026-09-14). It's a login bug affecting users, which is urgent and blocking real people, so the earliest realistic date \u2014 today \u2014 is appropriate.\n\n{\"action\": \"suggest_due_date\", \"task_id\": 5, \"suggested_due_date\": \"2026-09-17\", \"reasoning\": \"The task was due on 2026-09-14 and is already 3 days overdue; it's a user-facing login bug causing 500 erro"
+    },
+    {
+      "case": "C8_due_date_none",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6713,
+      "answer": "2026-10-15",
+      "confidence": 0.85,
+      "reasoning": "The task description states Marketing wants a draft by mid-October; 2026-10-15 aligns with that expectation and is well ahead of today (2026-09-17), giving realistic lead time.",
+      "raw_output": "Task 6 has no due date set. The description says Marketing wants a draft by mid-October, and today is 2026-09-17, so mid-October (2026-10-15) is a realistic and sensible target \u2014 it's within the stated expectation and gives adequate lead time.\n\n{\"action\": \"suggest_due_date\", \"task_id\": 6, \"priority\": null, \"suggested_due_date\": \"2026-10-15\", \"summary\": null, \"reasoning\": \"The task description stat"
+    },
+    {
+      "case": "C8_due_date_none",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 6237,
+      "answer": "2026-10-15",
+      "confidence": 0.85,
+      "reasoning": "The task description states Marketing wants a draft by mid-October; 2026-10-15 aligns with that expectation and is well ahead of today (2026-09-17), giving realistic lead time.",
+      "raw_output": "Task 6 has no due date set. The description says Marketing wants a draft by mid-October, and today is 2026-09-17, so mid-October (2026-10-15) is a realistic and sensible target \u2014 it's within the stated expectation and gives adequate lead time.\n\n{\"action\": \"suggest_due_date\", \"task_id\": 6, \"priority\": null, \"suggested_due_date\": \"2026-10-15\", \"summary\": null, \"reasoning\": \"The task description stat"
+    },
+    {
+      "case": "C9_weekly_summary",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "list_open_tasks",
+      "tools_called": [
+        "list_open_tasks",
+        "summarise_tasks"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 20543,
+      "answer": "You have 4 tasks due in the next 7 days (including 1 overdue",
+      "confidence": 0.95,
+      "reasoning": "Both tool calls returned clean, consistent data. The summary is built directly from the returned task list and aggregate counts, with urgency ordered by days_until_due.",
+      "raw_output": "{\"action\": \"weekly_summary\", \"task_id\": null, \"priority\": null, \"suggested_due_date\": null, \"summary\": \"You have 4 tasks due in the next 7 days (including 1 overdue) out of 8 total tasks. Here are the highlights, most urgent first:\\n\\n1. \ud83d\udd34 Fix login bug on student portal (Task #5) \u2014 OVERDUE since 2026-09-14. Users are hitting a 500 error; this is already 3 days late and should be addressed immedia"
+    },
+    {
+      "case": "C9_weekly_summary",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "list_open_tasks",
+      "tools_called": [
+        "list_open_tasks",
+        "summarise_tasks"
+      ],
+      "tools_ok": true,
+      "warnings": [],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 10742,
+      "answer": "You have 4 tasks due in the next 7 days (plus 1 overdue), ou",
+      "confidence": 0.95,
+      "reasoning": "Both list_open_tasks and summarise_tasks returned clear, consistent data covering all tasks due within 7 days and the one overdue item, giving a solid factual basis for the summary.",
+      "raw_output": "{\"action\": \"weekly_summary\", \"task_id\": null, \"priority\": null, \"suggested_due_date\": null, \"summary\": \"You have 4 tasks due in the next 7 days (plus 1 overdue), out of 8 total tasks. Here are the most urgent items:\\n\\n1. \ud83d\udd34 Fix login bug on student portal (Task #5) \u2014 OVERDUE since 2026-09-14. Users are hitting a 500 error; this is the most critical item and needs immediate attention.\\n2. \ud83d\udd34 Submit "
+    },
+    {
+      "case": "C10_missing_task",
+      "repeat": 1,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [
+        "priority missing for classify_priority"
+      ],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 15175,
+      "answer": "",
+      "confidence": 0.0,
+      "reasoning": "The tool returned an error: task 404 does not exist. No data is available to classify its priority.",
+      "raw_output": "The tool returned an error indicating that task 404 does not exist. Per the instructions, I will not invent any data.\n\n{\"action\": \"classify_priority\", \"task_id\": 404, \"priority\": null, \"suggested_due_date\": null, \"summary\": null, \"reasoning\": \"The tool returned an error: task 404 does not exist. No data is available to classify its priority.\", \"confidence\": 0.0}"
+    },
+    {
+      "case": "C10_missing_task",
+      "repeat": 2,
+      "parsed": true,
+      "correct": true,
+      "expected_tool": "lookup_task",
+      "tools_called": [
+        "lookup_task"
+      ],
+      "tools_ok": true,
+      "warnings": [
+        "priority missing for classify_priority"
+      ],
+      "error": null,
+      "llm_calls": 2,
+      "retry": false,
+      "latency_ms": 4941,
+      "answer": "",
+      "confidence": 0.0,
+      "reasoning": "The tool returned an error: task 404 does not exist. No data is available to classify its priority.",
+      "raw_output": "The tool returned an error indicating that task 404 does not exist. Per the instructions, I will not invent any data.\n\n{\"action\": \"classify_priority\", \"task_id\": 404, \"priority\": null, \"suggested_due_date\": null, \"summary\": null, \"reasoning\": \"The tool returned an error: task 404 does not exist. No data is available to classify its priority.\", \"confidence\": 0.0}"
+    }
+  ]
+}

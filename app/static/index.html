@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task Agent</title>
+<style>
+  /* My dashboard for the agent. White and off white with blue, and glass
+     panels so the log and the state feel like they sit on top of the page. */
+  :root {
+    --bg: #f5f7fb;
+    --ink: #0f1c33;
+    --muted: #5b6b85;
+    --blue: #2563eb;
+    --blue-soft: #dbe7ff;
+    --blue-deep: #1e40af;
+    --glass: rgba(255, 255, 255, 0.62);
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --line: rgba(37, 99, 235, 0.12);
+    --ok: #16a34a;
+    --warn: #d97706;
+    --bad: #dc2626;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--ink); background: var(--bg);
+    font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    position: relative; overflow-x: hidden;
+  }
+  /* soft blue blobs behind the glass so the blur has something to blur */
+  body::before, body::after {
+    content: ""; position: fixed; z-index: -1; border-radius: 50%; filter: blur(70px); opacity: .75;
+  }
+  body::before { width: 520px; height: 520px; left: -140px; top: -160px; background: #c7d8ff; }
+  body::after  { width: 620px; height: 620px; right: -200px; bottom: -220px; background: #dbeafe; }
+
+  .wrap { max-width: 1380px; margin: 0 auto; padding: 28px 24px 48px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  h1 { margin: 0; font-size: 24px; letter-spacing: -0.01em; }
+  h1 span { color: var(--blue); }
+  .sub { color: var(--muted); margin-top: 2px; }
+  .pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 600;
+          background: var(--blue-soft); color: var(--blue-deep); }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); }
+  .pill.down .dot { background: var(--bad); }
+
+  .grid { display: grid; grid-template-columns: 300px 1fr 360px; gap: 18px; align-items: start; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: 1fr 1fr; } .col-right { grid-column: 1 / -1; } }
+  @media (max-width: 720px)  { .grid { grid-template-columns: 1fr; } }
+
+  .glass {
+    background: var(--glass); border: 1px solid var(--glass-border); border-radius: var(--radius);
+    backdrop-filter: blur(18px) saturate(160%); -webkit-backdrop-filter: blur(18px) saturate(160%);
+    box-shadow: 0 10px 30px rgba(30, 64, 175, 0.08), inset 0 1px 0 rgba(255,255,255,.9);
+    padding: 18px; margin-bottom: 18px;
+  }
+  .glass h2 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+  .glass h2 small { text-transform: none; letter-spacing: 0; font-weight: 500; }
+
+  /* tasks */
+  .task { padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; cursor: pointer; transition: .15s; margin-bottom: 6px; background: rgba(255,255,255,.35); }
+  .task:hover { border-color: var(--line); background: rgba(255,255,255,.7); }
+  .task.selected { border-color: var(--blue); background: rgba(255,255,255,.9); box-shadow: 0 0 0 3px rgba(37,99,235,.12); }
+  .task .t { font-weight: 600; font-size: 13px; }
+  .task .m { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; font-size: 11px; color: var(--muted); }
+  .tag { padding: 1px 8px; border-radius: 999px; background: rgba(37,99,235,.08); color: var(--blue-deep); font-weight: 600; }
+  .tag.high { background: #fee2e2; color: #991b1b; } .tag.medium { background: #fef3c7; color: #92400e; } .tag.low { background: #dcfce7; color: #166534; }
+  .tag.done { background: #e5e7eb; color: #374151; } .tag.overdue { background: #fee2e2; color: #991b1b; }
+
+  /* controls */
+  .tabs { display: flex; gap: 6px; margin-bottom: 14px; background: rgba(37,99,235,.06); padding: 4px; border-radius: 12px; }
+  .tabs button { flex: 1; border: 0; background: transparent; padding: 8px 10px; border-radius: 9px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  .tabs button.on { background: #fff; color: var(--blue); box-shadow: 0 2px 8px rgba(30,64,175,.12); }
+  label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin: 10px 0 4px; }
+  input, textarea, select { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; background: rgba(255,255,255,.8); font: inherit; color: var(--ink); }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+  textarea { min-height: 64px; resize: vertical; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .btn { border: 0; border-radius: 11px; padding: 10px 16px; font-weight: 700; cursor: pointer; background: var(--blue); color: #fff; box-shadow: 0 6px 16px rgba(37,99,235,.28); transition: .15s; }
+  .btn:hover { background: var(--blue-deep); } .btn:disabled { opacity: .55; cursor: wait; }
+  .btn.ghost { background: rgba(255,255,255,.7); color: var(--blue-deep); box-shadow: none; border: 1px solid var(--line); }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+
+  /* result */
+  .result { margin-top: 16px; padding: 16px; border-radius: 14px; background: rgba(255,255,255,.75); border: 1px solid var(--line); display: none; }
+  .result.show { display: block; }
+  .big { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+  .big.high { color: var(--bad); } .big.medium { color: var(--warn); } .big.low { color: var(--ok); }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+  .chip { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--blue-soft); color: var(--blue-deep); }
+  .chip.bad { background: #fee2e2; color: #991b1b; } .chip.warn { background: #fef3c7; color: #92400e; } .chip.ok { background: #dcfce7; color: #166534; }
+  .bar { height: 8px; border-radius: 999px; background: rgba(37,99,235,.12); overflow: hidden; margin-top: 6px; }
+  .bar i { display: block; height: 100%; background: linear-gradient(90deg, #60a5fa, var(--blue)); width: 0; transition: width .4s; }
+  .reason { margin-top: 10px; color: var(--ink); }
+  .warnlist { margin: 8px 0 0; padding-left: 18px; color: #92400e; font-size: 12px; }
+  .err { color: var(--bad); font-weight: 600; margin-top: 10px; }
+
+  /* state */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .stat { background: rgba(255,255,255,.7); border: 1px solid var(--line); border-radius: 12px; padding: 10px; text-align: center; }
+  .stat b { display: block; font-size: 22px; color: var(--blue); }
+  .stat span { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  .kv { font-size: 12px; color: var(--muted); margin: 4px 0; } .kv b { color: var(--ink); font-weight: 600; }
+  .hist { max-height: 220px; overflow: auto; }
+  .h { font-size: 12px; padding: 7px 9px; border-radius: 9px; background: rgba(255,255,255,.55); margin-bottom: 5px; display: flex; gap: 8px; align-items: center; }
+  .h .when { color: var(--muted); font-variant-numeric: tabular-nums; }
+  pre.log { margin: 0; max-height: 300px; overflow: auto; font: 11px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; color: #1e293b; background: rgba(255,255,255,.55); border-radius: 12px; padding: 12px; white-space: pre-wrap; word-break: break-word; }
+  pre.log .st { color: var(--blue-deep); font-weight: 700; } pre.log .wn { color: var(--warn); } pre.log .er { color: var(--bad); font-weight: 700; } pre.log .tl { color: #0f766e; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Task <span>Agent</span></h1>
+      <div class="sub">COIT12204 Assessment 3. One LangChain agent, three actions, and every state change on screen.</div>
+    </div>
+    <div class="row">
+      <span class="pill" id="health"><i class="dot"></i> checking...</span>
+      <button class="btn ghost" id="resetBtn">Reset state</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- tasks -->
+    <section class="glass col-left">
+      <h2>Tasks <small id="taskCount"></small></h2>
+      <div id="tasks"></div>
+      <details style="margin-top:10px">
+        <summary class="hint" style="cursor:pointer">Add a task</summary>
+        <label>Title</label><input id="newTitle" placeholder="Title">
+        <label>Description</label><input id="newDesc" placeholder="Optional">
+        <div class="row" style="margin-top:8px">
+          <div style="flex:1"><label>Due date</label><input id="newDue" type="date"></div>
+          <div style="flex:1"><label>Priority</label>
+            <select id="newPri"><option value="">unset</option><option>low</option><option>medium</option><option>high</option></select></div>
+        </div>
+        <button class="btn ghost" id="addBtn" style="margin-top:10px">Add</button>
+      </details>
+    </section>
+
+    <!-- run the agent -->
+    <section class="glass col-mid">
+      <h2>Run the agent <small id="promptVer"></small></h2>
+      <div class="tabs">
+        <button data-tab="classify" class="on">Classify priority</button>
+        <button data-tab="due">Suggest due date</button>
+        <button data-tab="weekly">Weekly summary</button>
+      </div>
+
+      <div id="tab-classify">
+        <label>Saved task</label>
+        <select id="classifyTask"></select>
+        <div class="hint">Or leave that empty and describe a task that isn't saved yet:</div>
+        <label>Title</label><input id="classifyTitle" placeholder="e.g. Server room aircon failed">
+        <label>Description</label><textarea id="classifyDesc" placeholder="e.g. Temperature rising, servers will overheat within hours"></textarea>
+      </div>
+      <div id="tab-due" hidden>
+        <label>Saved task</label>
+        <select id="dueTask"></select>
+        <div class="hint">The agent looks the task up with the lookup_task tool and then suggests a date that's never in the past.</div>
+      </div>
+      <div id="tab-weekly" hidden>
+        <label>Days ahead: <span id="daysVal">7</span></label>
+        <input id="days" type="range" min="1" max="30" value="7">
+        <div class="hint">The agent calls list_open_tasks and summarise_tasks, then writes a short summary.</div>
+      </div>
+
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="runBtn">Run</button>
+        <span class="hint" id="runStatus"></span>
+      </div>
+
+      <div class="result" id="result">
+        <div class="chips" id="resChips"></div>
+        <div class="big" id="resBig"></div>
+        <div id="resSummary"></div>
+        <div class="kv" style="margin-top:8px">Confidence <b id="resConf"></b></div>
+        <div class="bar"><i id="resBar"></i></div>
+        <div class="reason" id="resReason"></div>
+        <ul class="warnlist" id="resWarn"></ul>
+        <div class="kv" id="resMeta"></div>
+        <div class="err" id="resErr"></div>
+      </div>
+    </section>
+
+    <!-- state, history, log -->
+    <div class="col-right">
+      <section class="glass">
+        <h2>Agent state <small>live</small></h2>
+        <div class="stats">
+          <div class="stat"><b id="sRuns">0</b><span>runs</span></div>
+          <div class="stat"><b id="sErr">0</b><span>errors</span></div>
+          <div class="stat"><b id="sFb">0</b><span>fallbacks</span></div>
+        </div>
+        <div class="kv">Last action <b id="sAction">none</b></div>
+        <div class="kv">Last tool call <b id="sTool">none</b></div>
+        <div class="kv">Last suggestion <b id="sSugg">none</b></div>
+        <div class="kv">Updated <b id="sUpd">never</b></div>
+      </section>
+      <section class="glass">
+        <h2>History</h2>
+        <div class="hist" id="history"></div>
+      </section>
+      <section class="glass">
+        <h2>Log <small>logs/agent.log</small></h2>
+        <pre class="log" id="log"></pre>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+// I kept this in plain JS with fetch, no framework. It just talks to my own API.
+const $ = (id) => document.getElementById(id);
+let tasks = [];
+let tab = "classify";
+
+async function api(path, opts) {
+  const r = await fetch(path, { headers: { "content-type": "application/json" }, ...opts });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(data.error || r.statusText), { detail: data.detail, status: r.status });
+  return data;
+}
+
+// ---------- tasks ----------
+async function loadTasks() {
+  try { tasks = await api("/api/tasks"); } catch (e) { $("taskCount").textContent = "API offline"; return; }
+  // local date, not UTC, so "overdue" agrees with the server's date.today()
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  $("taskCount").textContent = tasks.length + " total";
+  $("tasks").innerHTML = tasks.map(t => {
+    const overdue = t.due_date && t.due_date < today && t.status !== "done";
+    return `<div class="task" data-id="${t.id}">
+      <div class="t">#${t.id} ${esc(t.title)}</div>
+      <div class="m">
+        ${t.priority ? `<span class="tag ${t.priority}">${t.priority}</span>` : `<span class="tag">unset</span>`}
+        <span class="tag ${t.status === "done" ? "done" : ""}">${t.status.replace("_", " ")}</span>
+        ${t.due_date ? `<span class="${overdue ? "tag overdue" : ""}">${overdue ? "overdue " : "due "}${t.due_date}</span>` : `<span>no date</span>`}
+      </div></div>`;
+  }).join("");
+  const opts = `<option value="">(none)</option>` + tasks.map(t => `<option value="${t.id}">#${t.id} ${esc(t.title)}</option>`).join("");
+  $("classifyTask").innerHTML = opts;
+  $("dueTask").innerHTML = opts.replace(`<option value="">(none)</option>`, "");
+  document.querySelectorAll(".task").forEach(el => el.onclick = () => selectTask(+el.dataset.id));
+}
+function selectTask(id) {
+  document.querySelectorAll(".task").forEach(el => el.classList.toggle("selected", +el.dataset.id === id));
+  $("classifyTask").value = id; $("dueTask").value = id;
+  $("classifyTitle").value = ""; $("classifyDesc").value = "";
+}
+$("addBtn").onclick = async () => {
+  try {
+    await api("/api/tasks", { method: "POST", body: JSON.stringify({
+      title: $("newTitle").value, description: $("newDesc").value,
+      due_date: $("newDue").value || null, priority: $("newPri").value || null }) });
+    $("newTitle").value = ""; $("newDesc").value = ""; $("newDue").value = "";
+    await loadTasks();
+  } catch (e) { alert(e.message + (e.detail ? ": " + e.detail : "")); }
+};
+
+// ---------- tabs ----------
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  tab = b.dataset.tab;
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  ["classify", "due", "weekly"].forEach(t => $("tab-" + t).hidden = t !== tab);
+});
+$("days").oninput = () => $("daysVal").textContent = $("days").value;
+
+// ---------- run ----------
+$("runBtn").onclick = async () => {
+  let path, body;
+  if (tab === "classify") {
+    path = "/api/agent/classify_priority";
+    const id = $("classifyTask").value;
+    body = id ? { task_id: +id } : { title: $("classifyTitle").value, description: $("classifyDesc").value };
+  } else if (tab === "due") {
+    path = "/api/agent/suggest_due_date"; body = { task_id: +$("dueTask").value };
+  } else {
+    path = "/api/agent/weekly_summary"; body = { days_ahead: +$("days").value };
+  }
+  $("runBtn").disabled = true; $("runStatus").textContent = "Calling the agent...";
+  const t0 = performance.now();
+  try {
+    const data = await api(path, { method: "POST", body: JSON.stringify(body) });
+    showResult(data, Math.round(performance.now() - t0));
+  } catch (e) {
+    $("result").classList.add("show");
+    $("resChips").innerHTML = `<span class="chip bad">HTTP ${e.status || "?"}</span>`;
+    $("resBig").textContent = ""; $("resSummary").textContent = ""; $("resReason").textContent = "";
+    $("resWarn").innerHTML = ""; $("resMeta").textContent = ""; $("resConf").textContent = ""; $("resBar").style.width = "0";
+    $("resErr").textContent = e.message + (e.detail ? ". " + e.detail : "");
+  } finally {
+    $("runBtn").disabled = false; $("runStatus").textContent = "";
+    refresh();
+  }
+};
+
+function showResult(d, ms) {
+  const r = d.result;
+  $("result").classList.add("show");
+  $("resErr").textContent = "";
+  const chips = [`<span class="chip">${r.action}</span>`];
+  chips.push(d.fallback_used ? `<span class="chip bad">fallback used</span>` : `<span class="chip ok">model answered</span>`);
+  d.tools_called.forEach(t => chips.push(`<span class="chip">tool: ${esc(t)}</span>`));
+  if (d.warnings.length) chips.push(`<span class="chip warn">${d.warnings.length} correction${d.warnings.length > 1 ? "s" : ""}</span>`);
+  $("resChips").innerHTML = chips.join("");
+  if (r.action === "classify_priority") { $("resBig").textContent = r.priority || "no priority"; $("resBig").className = "big " + (r.priority || ""); $("resSummary").textContent = ""; }
+  else if (r.action === "suggest_due_date") { $("resBig").textContent = r.suggested_due_date || "no date"; $("resBig").className = "big"; $("resSummary").textContent = ""; }
+  else { $("resBig").textContent = ""; $("resSummary").textContent = r.summary || "(no summary)"; }
+  $("resConf").textContent = Math.round(r.confidence * 100) + "%";
+  $("resBar").style.width = Math.round(r.confidence * 100) + "%";
+  $("resReason").textContent = r.reasoning;
+  $("resWarn").innerHTML = d.warnings.map(w => `<li>${esc(w)}</li>`).join("");
+  $("resMeta").innerHTML = `request <b>${d.request_id}</b> &middot; prompt <b>${d.prompt_version}</b> &middot; <b>${ms} ms</b>`;
+}
+
+// ---------- state, history, log ----------
+async function refresh() {
+  try {
+    const s = await api("/api/agent/state");
+    $("sRuns").textContent = s.run_count; $("sErr").textContent = s.error_count; $("sFb").textContent = s.fallback_count;
+    $("sAction").textContent = s.last_action || "none";
+    $("sTool").textContent = s.last_tool_call ? `${s.last_tool_call.name}(${JSON.stringify(s.last_tool_call.args)}) ${s.last_tool_call.ok ? "ok" : "error"}` : "none";
+    $("sSugg").textContent = s.last_suggestion ? (s.last_suggestion.priority || s.last_suggestion.suggested_due_date || (s.last_suggestion.summary || "").slice(0, 60)) : "none";
+    $("sUpd").textContent = s.updated_at ? new Date(s.updated_at).toLocaleTimeString() : "never";
+    const h = await api("/api/agent/history?limit=12");
+    $("history").innerHTML = h.history.slice().reverse().map(e => {
+      const when = new Date(e.at).toLocaleTimeString();
+      if (e.type === "tool_call") return `<div class="h"><span class="when">${when}</span><span class="chip ${e.ok ? "" : "bad"}">tool</span> ${esc(e.name)}(${esc(JSON.stringify(e.args))})</div>`;
+      return `<div class="h"><span class="when">${when}</span><span class="chip ${e.fallback_used ? "bad" : "ok"}">run</span> ${esc(e.action)}${e.error ? ` <span style="color:#dc2626">${esc(e.error.slice(0, 40))}</span>` : ""}</div>`;
+    }).join("") || `<div class="hint">Nothing yet. Run the agent.</div>`;
+    const l = await api("/api/agent/logs?lines=80");
+    const box = $("log");
+    box.innerHTML = l.lines.map(line => {
+      let cls = "";
+      if (line.includes("STATE TRANSITION")) cls = "st"; else if (line.includes("TOOL")) cls = "tl";
+      if (line.includes("| ERROR")) cls = "er"; else if (line.includes("| WARNING")) cls = "wn";
+      return `<span class="${cls}">${esc(line.replace(/^\d{4}-\d\d-\d\d /, ""))}</span>`;
+    }).join("\n");
+    box.scrollTop = box.scrollHeight;
+  } catch (e) { /* the API may be restarting, I just try again on the next tick */ }
+}
+$("resetBtn").onclick = async () => {
+  try { await api("/api/agent/state/reset", { method: "POST" }); } catch (e) { alert("Could not reset: " + e.message); }
+  refresh();
+};
+
+async function health() {
+  try {
+    const h = await api("/health");
+    $("health").className = "pill"; $("health").innerHTML = `<i class="dot"></i> ${h.model} &middot; prompt ${h.prompt_version}`;
+    $("promptVer").textContent = "prompt " + h.prompt_version;
+  } catch { $("health").className = "pill down"; $("health").innerHTML = `<i class="dot"></i> API offline`; }
+}
+function esc(s) { return String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+health(); loadTasks(); refresh();
+setInterval(refresh, 3000);
+setInterval(health, 10000);
+</script>
+</body>
+</html>
