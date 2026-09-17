@@ -43,9 +43,16 @@ Python 3.11 or newer.
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
+source .venv/bin/activate          # Windows: .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 cp .env.example .env               # then put your API key in .env (see below)
+```
+
+**Windows PowerShell note:** if `.venv\Scripts\Activate.ps1` fails with a
+"running scripts is disabled" error, run this once per terminal window before
+activating:
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
 `.env` values:
@@ -63,13 +70,6 @@ cp .env.example .env               # then put your API key in .env (see below)
 | `LLM_TIMEOUT_SECONDS` | `30` | Per call timeout for the model. |
 | `HISTORY_LIMIT` | `50` | Entries kept in the state history. |
 | `TASKS_FILE`, `STATE_FILE`, `LOG_FILE` | `data/tasks.json`, `data/agent_state.json`, `logs/agent.log` | Where things are stored. |
-
-**Windows PowerShell note:** if `.venv\Scripts\Activate.ps1` fails with a
-"running scripts is disabled" error, run this once per terminal window before
-activating:
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-```
 
 ## Run the API
 
