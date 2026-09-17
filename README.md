@@ -63,7 +63,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 | `OPENAI_API_KEY` | (none) | Needed when the provider is openai. Tests never use it. |
 | `OPENAI_MODEL` | `gpt-4o-mini` | Any OpenAI chat model with tool calling. |
 | `ANTHROPIC_API_KEY` | (none) | Needed when the provider is anthropic. |
-| `ANTHROPIC_MODEL` | `claude-haiku-4-5` | Any Claude model with tool calling. |
+| `ANTHROPIC_MODEL` | `claude-sonnet-4-6` | Any Claude model with tool calling. |
 | `PROMPT_VERSION` | `v3` | `v1`, `v2` or `v3`. See `app/prompts.py`. |
 | `MAX_TOOL_ROUNDS` | `3` | Tool calling rounds before the agent forces an answer. |
 | `MAX_INPUT_CHARS` | `500` | Free text longer than this is rejected with 400. |
